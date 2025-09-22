@@ -6,7 +6,7 @@ Esta es la versión inicial del sistema ToroGo, orientado a la gestión de viaje
 
 1. Clona el repositorio y accede a las carpetas correspondientes:
 
-- git clone https://github.com/tu-usuario/torogo.git
+- git clone https://github.com/Hocchik/ToroGo---FullStack-project.git
 - cd torogo
 
 2.  Instala las dependencias en ambos entornos:
