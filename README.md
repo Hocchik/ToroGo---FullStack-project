@@ -6,15 +6,15 @@ Esta es la versión inicial del sistema ToroGo, orientado a la gestión de viaje
 
 1. Clona el repositorio y accede a las carpetas correspondientes:
 
-git clone https://github.com/tu-usuario/torogo.git
-cd torogo
+- git clone https://github.com/tu-usuario/torogo.git
+- cd torogo
 
 2.  Instala las dependencias en ambos entornos:
-cd ../backend
-npm install
+- cd ../backend
+- npm install
 
-cd ../frontend
-npm install
+- cd ../frontend
+- npm install
 
 3. Configura tus variables de entorno:
 - Crea un archivo .env en las carpetas backend/ y frontend/.
@@ -26,10 +26,10 @@ https://www.postgresql.org/download/
 ▶️ Ejecución del proyecto
 Inicia ambos servidores en terminales separadas:
 # Terminal 1 - Backend
-cd backend
-npm run dev
+- cd backend
+- npm run dev
 
 # Terminal 2 - Frontend
-cd frontend
-npm run dev
+- cd frontend
+- npm run dev
 
