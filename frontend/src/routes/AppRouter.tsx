@@ -19,17 +19,17 @@ import { LoginForm } from '../features/auth/components/LoginForm';
 import { RegisterForm } from '../features/auth/components/RegisterForm'; */
 
 // Protected Pages
-import { PassengerDashboard } from '../features/passenger/pages/PassengerDashboard';
-import { DriverDashboard } from '../features/driver/pages/DriverDashboard';
+import { PassengerPage } from '../features/passenger/pages/PassengerPage';
 import type { JSX } from 'react';
+import { DriverPage } from '../features/driver/pages/DriverPage';
 
 // ServiceRoute es para rutas que requieren autenticación
 const ServiceRoute = ({ children }: { children: JSX.Element }) => {
   const { token } = useSelector((state: RootState) => state.auth);
-  
+  console.log(token)
   if (!token) {
     // Redirige al login si intentan acceder a servicios sin autenticación
-    return <Navigate to="/auth/login" replace />;
+    return <Navigate to="/auth" replace />;
   }
   
   return children;
@@ -45,20 +45,17 @@ export const AppRouter = () => {
           <Route path="about" element={<AboutPage />} />
           <Route path="contact" element={<ContactPage />} />
 
-
-          {/* Rutas de Servicio - Requieren autenticación */}
-          <Route path="service" element={<ServiceRoute><MainLayout /></ServiceRoute>}>
-            {/* Dashboard de Pasajero */}
-            <Route path="passenger" element={<PassengerDashboard />} />
-            
-            {/* Dashboard de Conductor */}
-            <Route path="driver" element={<DriverDashboard />} />
-          </Route>
-
         </Route>
 
+
+        {/* Rutas de servicio - Passenger */}
+        <Route path='/service/passenger' element={<ServiceRoute><PassengerPage/></ServiceRoute>}/>
+        
+        {/* Rutas de servicio - Conductor */}
+        <Route path='/service/driver' element={<ServiceRoute><DriverPage/></ServiceRoute>}/>
+
         {/* Rutas de Autenticación */}
-        <Route path="auth" element={<AuthPage />} />
+        <Route path="/auth" element={<AuthPage />} />
 
         {/* Ruta 404 */}
           <Route path="*" element={<Navigate to="/" replace />} />

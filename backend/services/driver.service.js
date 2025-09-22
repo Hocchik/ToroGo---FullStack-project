@@ -8,4 +8,12 @@ export const createDriver = async (user_id) => {
   return result.rows[0];
 };
 
+export const finbyId = async (id) => {
+  const result = await pool.query(
+    `Select id drivers WHERE id = (id)`,
+    [id]
+  );
+  return result.rows[0];
+};
+
 // Puedes agregar más funciones aquí según lo necesites

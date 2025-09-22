@@ -4,6 +4,9 @@ import App from './App.tsx';
 import { Provider } from 'react-redux';
 import { store } from './store/index.ts';
 import './styles/tailwind.css';
+import './styles/typografy.css'
+import "mapbox-gl/dist/mapbox-gl.css";
+
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

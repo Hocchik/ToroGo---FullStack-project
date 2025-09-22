@@ -16,9 +16,7 @@ export const AuthPage = () => {
   useEffect(() => {
     if (token) {
       // Redirect based on role
-      const redirectPath = role === 'passenger' 
-        ? '/service/request' 
-        : '/service/drive';
+      const redirectPath = '/'
       navigate(redirectPath, { replace: true });
     }
   }, [token, role, navigate]);

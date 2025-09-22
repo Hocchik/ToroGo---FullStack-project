@@ -33,3 +33,10 @@ export interface AuthState {
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
 }
+
+export interface User {
+    id: number;
+    full_name: string;
+    email: string;
+    dni: string;
+}
