@@ -21,7 +21,7 @@ npm install
 - Ajusta las rutas, credenciales y puertos según tu sistema local.
 
 4. Asegúrate de tener PostgreSQL instalado en tu máquina. Puedes descargarlo desde el siguiente enlace:
-   https://www.postgresql.org/download/ 
+https://www.postgresql.org/download/ 
 
 ▶️ Ejecución del proyecto
 Inicia ambos servidores en terminales separadas:
