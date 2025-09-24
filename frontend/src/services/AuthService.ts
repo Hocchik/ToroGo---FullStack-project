@@ -19,6 +19,7 @@ apiClient.interceptors.request.use((config) => {
 // ✅ Servicio de autenticación
 export const authService = {
   register: async (payload: RegisterRequest): Promise<LoginResponse> => {
+    console.log(payload)
     const { data } = await apiClient.post('/auth/register', payload);
     return data;
   },

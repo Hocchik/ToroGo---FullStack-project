@@ -19,6 +19,8 @@ export const registerUser = createAsyncThunk(
   async (userData: RegisterRequest, { rejectWithValue }) => {
     try {
       const response = await authService.register(userData);
+      console.log(response.token)
+      console.log(response.user)
       if (!response.token || !response.user) {
         return rejectWithValue('Registro incompleto');
       }

@@ -28,8 +28,9 @@ export const MainLayout = () => {
 
             {/* Usuario y rol */}
             <div className="flex items-center space-x-4">
+              
                 <Link
-                  to="/service/passenger"
+                  to={role === 'driver' ? '/service/driver' : '/service/passenger'}
                   className="px-3 py-1 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition"
                 >
                   Inicia tu Viaje

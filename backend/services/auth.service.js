@@ -6,7 +6,7 @@ import { generateToken } from '../utils/tokenUtils.js';
 import bcrypt from 'bcrypt';
 
 export const registerUser = async (RegisterDto) => {
-  const { full_name, dni, age, email, password, role/* guardian_id  */} = RegisterDto;
+  const { full_name, dni, age, email, password, role } = RegisterDto;
 
   const existingUser = await findUserByDNI(dni);
   if (existingUser) {
@@ -27,7 +27,26 @@ export const registerUser = async (RegisterDto) => {
     await createDriver(user.id);
   }
 
-  return { status: 201, data: { message: 'User registered successfully', user } };
+  const token = generateToken({
+    userId: user.id,
+    dni: user.dni,
+    role,
+  });
+
+  return {
+    status: 201,
+    data: {
+      message: 'User registered successfully',
+      token,
+      role,
+      user: {
+        id: user.id,
+        full_name: user.full_name,
+        dni: user.dni,
+        email: user.email,
+      },
+    },
+  };
 };
 
 export const loginUser = async (LoginDto) => {

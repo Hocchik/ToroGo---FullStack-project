@@ -63,7 +63,7 @@ export const DriverPage = () => {
                 onClick={handleGoOnline}
                 className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-green-700 transition"
               >
-                Go Online
+                Buscar viajes
               </button>
             )}
           </div>
