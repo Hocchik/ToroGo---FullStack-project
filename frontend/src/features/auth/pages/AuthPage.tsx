@@ -28,10 +28,10 @@ export const AuthPage = () => {
                 className="w-32 h-32 object-contain mx-auto mb-6"
               />
             </div>
+            <LoginForm />
           </div>
-          
         </div>
-        <LoginForm />
+        
       </div>
 
     </div>
