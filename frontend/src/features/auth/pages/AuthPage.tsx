@@ -1,5 +1,5 @@
 import toriGo from '/src/assets/logo-torigo.jpg';
-import LoginForm  from '../components/LoginForm';
+import LoginForm from '../components/LoginForm';
 
 export const AuthPage = () => {
 
@@ -29,9 +29,11 @@ export const AuthPage = () => {
               />
             </div>
           </div>
+          
         </div>
-        <LoginForm/>
+        <LoginForm />
       </div>
+
     </div>
   );
 };

@@ -19,10 +19,7 @@ const LoginForm = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await dispatch(loginUser(credentials));
-  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -31,11 +28,11 @@ const LoginForm = () => {
     }));
   };
 
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   // Aquí iría la lógica de autenticación
-  //   console.log('Login attempt:', formData);
-  // };
+    const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Aquí iría la lógica de autenticación
+    console.log('Login attempt:', formData);
+  };
 
   const handleGoogleLogin = () => {
     // Aquí iría la lógica de login con Google
