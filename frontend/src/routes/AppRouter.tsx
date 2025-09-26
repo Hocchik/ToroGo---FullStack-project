@@ -13,7 +13,6 @@ import { ContactPage } from '../features/home/pages/ContactPage';
 
 // Auth Pages
 import { AuthPage } from '../features/auth/pages/AuthPage';
-import { SignUpPage } from '../features/auth/pages/SignUpPage';
 /* import { RequestTrip } from '../features/passenger/pages/RequestTrip';
 
 import { LoginForm } from '../features/auth/components/LoginForm';
@@ -57,7 +56,6 @@ export const AppRouter = () => {
 
         {/* Rutas de Autenticación */}
         <Route path="/auth" element={<AuthPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
 
         {/* Ruta 404 */}
           <Route path="*" element={<Navigate to="/" replace />} />

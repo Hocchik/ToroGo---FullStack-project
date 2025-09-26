@@ -1,13 +1,25 @@
-import toriGo from '/src/assets/logo-torigo.jpg';
+import toriGo from '/src/assets/logo-torigo.png';
 import LoginForm from '../components/LoginForm';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
+import { RegisterForm } from '../components/RegisterForm';
+
 
 export const AuthPage = () => {
+  const [searchParams] = useSearchParams();
+  const [isLogin, setIsLogin] = useState(!searchParams.get('register'));
+  const navigate = useNavigate();
+
+  const handleToggle = (login: boolean) => {
+    setIsLogin(login);
+    navigate(`/auth${login ? '' : '?register=true'}`, { replace: true });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-white">
       <div className="min-h-screen flex">
         {/* Logo Section - Left Side */}
-        <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 bg-[#F7F7F7] items-center justify-center p-12">
+        <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 bg-[#f7f7f7] items-center justify-center p-12">
           <div className="max-w-md">
             <img
               src={toriGo}
@@ -28,10 +40,31 @@ export const AuthPage = () => {
                 className="w-32 h-32 object-contain mx-auto mb-6"
               />
             </div>
-            <LoginForm />
+            <div className="text-center lg:text-left">
+              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+                {isLogin ? 'Bienvenido!' : 'Únete a ToroGo!'}
+              </h1>
+              <p className="text-gray-600 mt-2 font-bold">
+                {isLogin ? 'Accede a tu cuenta' : 'Crea tu cuenta para comenzar'}
+              </p>
+            </div>
+            {isLogin ? <LoginForm /> : <RegisterForm />}
+            
+            {/* Register Link */}
+            <div className="text-center">
+              <p className="text-sm text-gray-600">
+                {isLogin? '¿No tienes una cuenta?' : '¿Ya tienes una cuenta?'}
+                <a
+                  onClick={() => handleToggle(!isLogin)}
+                  className="font-medium text-red-700 hover:text-red-800 transition-colors duration-200"
+                >
+                  {isLogin? ' Regístrate aquí' : ' Inicia sesión aquí'}
+                </a>
+              </p>
+            </div>
           </div>
         </div>
-        
+
       </div>
 
     </div>

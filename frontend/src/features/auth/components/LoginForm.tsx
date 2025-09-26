@@ -43,11 +43,7 @@ const LoginForm = () => {
     <div>
       {/* Login Form Section - Right Side */}
       {/* Header */}
-      <div className="text-center lg:text-left">
-        <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
-          Inicia sesión
-        </h1>
-      </div>
+      
 
       {/* Login Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -142,18 +138,7 @@ const LoginForm = () => {
         Continúa con Google
       </button>
 
-      {/* Register Link */}
-      <div className="text-center">
-        <p className="text-sm text-gray-600">
-          ¿Todavía no tienes una cuenta?{' '}
-          <a
-            href="#"
-            className="font-medium text-red-700 hover:text-red-800 transition-colors duration-200"
-          >
-            Regístrate aquí
-          </a>
-        </p>
-      </div>
+      
     </div>
   );
 };
