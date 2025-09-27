@@ -19,7 +19,7 @@ export const AuthPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-white to-white">
       <div className="min-h-screen flex">
         {/* Logo Section - Left Side */}
-        <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 bg-[#f7f7f7] items-center justify-center p-12">
+        <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 bg-[#f7f7f7] items-end justify-center p-12">
           <div className="max-w-md">
             <img
               src={toriGo}

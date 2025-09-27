@@ -97,7 +97,7 @@ const LoginForm = () => {
         {/* Forgot Password Link */}
         <div className="text-left">
           <a
-            href="#"
+            href="/recover-password"
             className="text-sm text-gray-600 hover:text-red-600 transition-colors duration-200"
           >
             ¿Olvidaste tu contraseña? Recupérala aquí
