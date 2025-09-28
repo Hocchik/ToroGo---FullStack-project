@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../store';
 import { RecoverPassword } from '../features/auth/pages/RecoverPassword';
+import { VerificationCodePage } from '../features/auth/pages/VerificationCodePage';
 
 // Layouts
 import { MainLayout } from '../components/layouts/MainLayout';
@@ -60,6 +61,8 @@ export const AppRouter = () => {
 
         {/* Rutas de recuperación de contraseña */}
         <Route path="/recover-password" element={<RecoverPassword />} />
+        <Route path="/verification-code" element={<VerificationCodePage />} />
+        
         {/* Ruta 404 */}
           <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

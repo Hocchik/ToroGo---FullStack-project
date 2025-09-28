@@ -15,11 +15,11 @@ export const RecoverPassword = () => {
 
         <div className="min-h-screen flex">
           <img
-                src="/src/assets/Logo.png"
-                alt="ToriGo"
-                className="w-28 h-28 object-contain mx-auto mb-6 logo"
-              />
-      </div>
+            src="/src/assets/Logo.png"
+            alt="ToriGo"
+            className="w-28 h-28 object-contain mx-auto mb-6 logo"
+          />
+        </div>
       </header>
 
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-8 md:py-16">
