@@ -10,6 +10,7 @@ import { MainLayout } from '../components/layouts/MainLayout';
 import { HomePage } from '../features/home/pages/HomePage';
 import { AboutPage } from '../features/home/pages/AboutPage';
 import { ContactPage } from '../features/home/pages/ContactPage';
+import { DriverRequire } from '../features/home/pages/DriverRequire';
 
 // Auth Pages
 import { AuthPage } from '../features/auth/pages/AuthPage';
@@ -44,6 +45,7 @@ export const AppRouter = () => {
           <Route index element={<HomePage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="contact" element={<ContactPage />} />
+          <Route path="driver-Requirements" element={<DriverRequire />} />
 
         </Route>
 
