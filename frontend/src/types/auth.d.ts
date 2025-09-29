@@ -3,6 +3,7 @@ export interface RegisterRequest {
   dni: string;
   age: number;
   email: string;
+  phone: string;
   password: string;
   role: string;
   guardian_id?: number;
