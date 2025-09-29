@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { store } from './store/index.ts';
 import './styles/tailwind.css';
 import './styles/typografy.css'
+import "./styles/notification.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 
