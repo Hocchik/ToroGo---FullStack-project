@@ -27,6 +27,8 @@ import { RegisterForm } from '../features/auth/components/RegisterForm'; */
 import { PassengerPage } from '../features/passenger/pages/PassengerPage';
 import type { JSX } from 'react';
 import { DriverPage } from '../features/driver/pages/DriverPage';
+import DriverProfile from '../features/driver/pages/DriverProfile';
+import PassengerProfile from '../features/passenger/pages/PassengerProfile';
 
 // ServiceRoute es para rutas que requieren autenticación
 const ServiceRoute = ({ children }: { children: JSX.Element }) => {
@@ -37,6 +39,17 @@ const ServiceRoute = ({ children }: { children: JSX.Element }) => {
     return <Navigate to="/auth" replace />;
   }
   
+  return children;
+};
+
+const ProfileRoute = ({ children }: { children: JSX.Element }) => {
+  const { token } = useSelector((state: RootState) => state.auth);
+
+  if (!token) {
+    // Redirige al login si intentan acceder a servicios sin autenticación
+    return <Navigate to="/auth" replace />;
+  }
+
   return children;
 };
 
@@ -53,6 +66,12 @@ export const AppRouter = () => {
 
         </Route>
 
+
+        {/* Ruta de perfil - Passenger */}
+        <Route path='/profile/passenger' element={<ProfileRoute><PassengerProfile/></ProfileRoute>} />
+
+        {/* Ruta de perfil - Driver */}
+        <Route path='/profile/driver' element={<ProfileRoute><DriverProfile/></ProfileRoute>} />
 
         {/* Rutas de servicio - Passenger */}
         <Route path='/service/passenger' element={<ServiceRoute><PassengerPage/></ServiceRoute>}/>

@@ -43,7 +43,7 @@ export const UserMenu = ({ user, role }: { user: User | null ; role: string | nu
             <Menu.Item>
               {({ active }: { active: boolean }) => (
                 <Link
-                  to="/profile"
+                  to={`/profile/${role}`}
                   className={`block px-4 py-2 text-sm ${
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                   }`}

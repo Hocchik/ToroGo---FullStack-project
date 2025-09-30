@@ -13,8 +13,7 @@ export const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(!searchParams.get('register'));
   const navigate = useNavigate();
 
-  // Acceso al estado de autenticación desde authSlice 
-  const { token, role } = useSelector((state: RootState) => state.auth);
+    const { token, role } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => { 
     if (token) {
