@@ -13,7 +13,7 @@ export default function SlidingSidebar({ open, onClose, children, title = "Panel
       {/* Overlay */}
       <div
         className={`fixed inset-0 bg-black bg-opacity-30 z-30 transition-opacity duration-300 ${
-          open ? "opacity-100" : "opacity-0 pointer-events-none"
+          open ? "opacity-30" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
       />

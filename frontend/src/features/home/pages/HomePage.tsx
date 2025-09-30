@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
-export const homePageStyles = {
+ const homePageStyles = {
   container: "",
   
   heroSection: "relative h-screen bg-gradient-to-r from-yellow-400 to-orange-500 ",
