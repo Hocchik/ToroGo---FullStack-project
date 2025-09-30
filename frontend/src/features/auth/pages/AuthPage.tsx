@@ -10,7 +10,7 @@ export const AuthPage = () => {
   const [searchParams] = useSearchParams();
   const [isLogin, setIsLogin] = useState(!searchParams.get('register'));
 
-    const { token, role } = useSelector((state: RootState) => state.auth);
+  const { token, role } = useSelector((state: RootState) => state.auth);
 
   // Redirect if user is already authenticated
   useEffect(() => {
