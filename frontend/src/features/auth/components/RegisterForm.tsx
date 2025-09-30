@@ -4,7 +4,7 @@ import { registerUser } from '../authSlice';
 import type { AppDispatch, RootState } from '../../../store';
 import type { RegisterRequest } from '../../../types/auth';
 import { Eye, EyeOff } from 'lucide-react';
-import { calculateAge } from '../../../utils/CalculateAge';
+import { calculateAge } from '../../../utils/calculateAge';
 
 export const RegisterForm = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,7 +20,7 @@ export const RegisterForm = () => {
     email: '',
     phone: '',
     password: '',
-    role: 'driver'
+    role: 'passenger'
   });
 
 
