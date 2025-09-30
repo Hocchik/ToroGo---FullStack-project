@@ -1,4 +1,8 @@
-import { createUser, findUserByDNI, findUserByEmail } from './user.service.js';
+import {
+  createUser,
+  findUserByDNI,
+  findUserByEmailOrPhone,
+} from './user.service.js';
 import { createPassenger } from './passenger.service.js';
 import { createDriver } from './driver.service.js';
 import { getUserRoles } from './role.service.js';
@@ -6,7 +10,14 @@ import { generateToken } from '../utils/tokenUtils.js';
 import bcrypt from 'bcrypt';
 
 export const registerUser = async (RegisterDto) => {
-  const { full_name, dni, age, email, password, role } = RegisterDto;
+  const { full_name, dni, age, email, phone, password, role } = RegisterDto;
+
+  if (!email && !phone) {
+    return {
+      status: 400,
+      data: { error: 'Email or phone number is required' },
+    };
+  }
 
   const existingUser = await findUserByDNI(dni);
   if (existingUser) {
@@ -14,11 +25,21 @@ export const registerUser = async (RegisterDto) => {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = await createUser({ full_name, dni, age, email, password: hashedPassword });
+  const user = await createUser({
+    full_name,
+    dni,
+    age,
+    email,
+    phone,
+    password: hashedPassword,
+  });
 
   if (role === 'passenger') {
     if (age < 18) {
-      return { status: 400, data: { error: 'Minors must have a guardian' } };
+      return {
+        status: 400,
+        data: { error: 'Minors must have a guardian' },
+      };
     }
     await createPassenger({ user_id: user.id });
   }
@@ -44,14 +65,16 @@ export const registerUser = async (RegisterDto) => {
         full_name: user.full_name,
         dni: user.dni,
         email: user.email,
+        phone: user.phone,
       },
     },
   };
 };
 
 export const loginUser = async (LoginDto) => {
-  const { email, password } = LoginDto;
-  const user = await findUserByEmail(email);
+  const { identifier, password } = LoginDto;
+
+  const user = await findUserByEmailOrPhone(identifier);
   if (!user) {
     return { status: 404, data: { error: 'User not found' } };
   }
@@ -81,6 +104,7 @@ export const loginUser = async (LoginDto) => {
           full_name: user.full_name,
           dni: user.dni,
           email: user.email,
+          phone: user.phone,
         },
       },
     };
@@ -96,6 +120,7 @@ export const loginUser = async (LoginDto) => {
         full_name: user.full_name,
         dni: user.dni,
         email: user.email,
+        phone: user.phone,
       },
     },
   };
@@ -105,7 +130,10 @@ export const selectActiveRole = async (user, role) => {
   const { userId, dni } = user;
   const roles = await getUserRoles(userId);
   if (!roles.includes(role)) {
-    return { status: 403, data: { error: 'Role not assigned to this user' } };
+    return {
+      status: 403,
+      data: { error: 'Role not assigned to this user' },
+    };
   }
 
   const token = generateToken({ userId, dni, role });

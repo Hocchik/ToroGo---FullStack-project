@@ -1,9 +1,10 @@
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   full_name TEXT NOT NULL,
-  dni TEXT UNIQUE NOT NULL,
-  age INTEGER NOT NULL,
+  dni TEXT UNIQUE,
+  phone TEXT UNIQUE NOT NULL,
   email TEXT UNIQUE NOT NULL,
+  age INTEGER NOT NULL,
   password TEXT NOT NULL
 );
 

@@ -138,7 +138,7 @@ export const HomePage = () => {
 
               <div className={homePageStyles.buttonGroup}>
                 <Link 
-                  to="/auth"
+                  to="/service/passenger"
                   className={homePageStyles.primaryButton}
                 >
                   Comenzar

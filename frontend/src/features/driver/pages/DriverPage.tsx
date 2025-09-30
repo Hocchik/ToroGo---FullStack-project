@@ -115,7 +115,7 @@ export const DriverPage = () => {
 
         {/* Mapa y botones de menú */}
         <div className="flex-1 relative flex items-center justify-center">
-          <div className="text-gray-400 text-sm">🗺️ Mapa en desarrollo</div>
+          <div className="text-gray-400 text-sm">🗺 Mapa en desarrollo</div>
 
           {/* Botón para abrir solicitudes */}
           {isOnline && !activeRide && !requestPanelOpen && (
@@ -165,6 +165,6 @@ export const DriverPage = () => {
           </div>
         )}
       </div>
-    </div>
-  );
+    </div>
+  );
 };
