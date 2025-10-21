@@ -72,9 +72,16 @@ export const registerUser = async (RegisterDto) => {
 };
 
 export const loginUser = async (LoginDto) => {
-  const { identifier, password } = LoginDto;
+  // Frontend may send { email, password } or { identifier, password } (phone/email)
+  const { identifier, email, phone, password } = LoginDto;
 
-  const user = await findUserByEmailOrPhone(identifier);
+  // Prefer explicit identifier, then email, then phone
+  const lookup = identifier || email || phone;
+  if (!lookup || !password) {
+    return { status: 400, data: { error: 'Identifier (email or phone) and password are required' } };
+  }
+
+  const user = await findUserByEmailOrPhone(lookup);
   if (!user) {
     return { status: 404, data: { error: 'User not found' } };
   }

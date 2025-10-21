@@ -1,10 +1,12 @@
 import pool from '../config/dbConfig.js';
 
 export const createUser = async ({ full_name, dni, age, email, phone, password }) => {
+  // Ensure phone is either a string or null (not undefined) to avoid driver type issues
+  const phoneValue = phone === undefined ? null : phone;
   const result = await pool.query(
     `INSERT INTO users (full_name, dni, age, email, phone, password)
      VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-    [full_name, dni, age, email, phone, password]
+    [full_name, dni, age, email, phoneValue, password]
   );
   return result.rows[0];
 };

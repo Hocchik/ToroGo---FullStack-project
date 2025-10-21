@@ -4,6 +4,7 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import { Server } from 'socket.io';
+import dotenv from 'dotenv';
 
 import authRoutes from './routes/auth.routes.js';
 import tripRoutes from './routes/trip.routes.js';
@@ -11,6 +12,9 @@ import motorcycleRoutes from './routes/motorcycle.routes.js';
 import passwordRoutes from './routes/password.routes.js';
 
 import swaggerUi from 'swagger-ui-express';
+
+// Load environment variables from .env (if present)
+dotenv.config();
 
 const swaggerPath = path.resolve('./tests/swagger/swagger.json');
 const swaggerDocument = JSON.parse(fs.readFileSync(swaggerPath, 'utf8'));

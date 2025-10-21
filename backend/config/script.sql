@@ -2,8 +2,8 @@ CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   full_name TEXT NOT NULL,
   dni TEXT UNIQUE,
-  phone TEXT UNIQUE NOT NULL,
-  email TEXT UNIQUE NOT NULL,
+  phone TEXT UNIQUE,
+  email TEXT UNIQUE,
   age INTEGER NOT NULL,
   password TEXT NOT NULL
 );
@@ -38,3 +38,6 @@ CREATE TABLE trips (
   fare NUMERIC,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Ensure at least one contact method exists for a user
+ALTER TABLE users ADD CONSTRAINT email_or_phone_not_null CHECK (email IS NOT NULL OR phone IS NOT NULL);
