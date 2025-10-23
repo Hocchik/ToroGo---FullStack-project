@@ -25,4 +25,5 @@ router.post('/select-role', authenticate, selectActiveRole);
  */
 router.post('/register', registerUser);
 
+
 export default router;
