@@ -3,12 +3,12 @@ import {
   createUser,
   findUserByDNI,
   findUserByEmailOrPhone,
+  logIn
 } from './user.service.js';
 import { createPassenger } from './passenger.service.js';
 import {
   createDriver,
-  doesLicenseBelongsToDriver,
-  doesPlateBelongToVehicle,
+  validateDriverData
 } from './driver.service.js';
 import { getUserRoles } from './role.service.js';
 import { generateToken } from '../utils/tokenUtils.js';
@@ -79,6 +79,20 @@ export const registerUser = async (RegisterDto) => {
   };
 };
 
+export const loginUser = async (email, password) => {
+  const does_user_exist = await logIn(email,password)
+
+  if(!does_user_exist){
+    return {
+      valid: false,
+      status: 400,
+      data:{error : "El usuario no existe"} 
+    }
+  }
+
+  return console.log("inicio de sesión exitoso!!!")
+}
+
 // función que verifica que el formulario en uso haya sido llenado completamente
 const checkFormHasNoBlankGaps = async (RegisterDto) => {
 const { email, phone, dni } = RegisterDto;
@@ -132,18 +146,19 @@ export const registerDriver = async (RegisterDriverDto) => {
 
   // si el form está completo, se continua con el flujo:
 
-  /* verificamos que la licencia exista y le pertenezca al driver al igual que
+  /* 
+     verificamos que la licencia exista y le pertenezca al driver al igual que
      la placa del vehiculo 
   */
- console.log("license:....",license)
-  const doesLicenseExist = await doesLicenseBelongsToDriver(license);
-  const doesPlateExist = await doesPlateBelongToVehicle(plate);
 
-  if (!doesLicenseExist) {
-    return { status: 404, data: { error: 'No se encontró la licencia' } };
-  }
-  if (!doesPlateExist) {
-    return { status: 404, data: { error: 'No se encontró la placa' } };
+  const is_data_valid = await validateDriverData(dni, license, plate);
+
+  if (!is_data_valid) {
+    return {
+      valid: false,
+      status: 400,
+      data: {error: 'Invalid data'}
+    }
   }
 
   // creamos el usuario

@@ -19,33 +19,27 @@ export const finbyId = async (id) => {
 
 // Puedes agregar más funciones aquí según lo necesites
 
-export const doesLicenseBelongsToDriver = async (license) => {
-  console.log(license)
-  //---------------OJO---------------------------------------------------------------------
-  //aquí se valida que la licencia exista, mas no se valida si le pertenece a la persona...
-  const result = await pool.query(
-    `select * from registered_drivers where license = $1`,
-    [license]
-  )
-
-  if(result.rowCount > 0){
-    return true;
-  } else {
-    return false;
-  }
-}
-
-export const doesPlateBelongToVehicle = async (plate) => {
-  //---------------OJO---------------------------------------------------------------------
-  //aquí se valida que la placa exista, mas no se valida si el vehiculo le pertenece a la persona...
-  const result = await pool.query(
-    `SELECT * FROM registered_vehicles WHERE plate = $1`,
-    [plate]
+export const validateDriverData = async(dni, license, plate) => {
+  // Validar licencia con el DNI
+  const driverResult = await pool.query(
+    `SELECT * FROM registered_drivers WHERE license = $1 AND dni = $2`,
+    [license, dni]
   );
-  if(result.rowCount > 0){
-    return true;
-  } else {
-    return false;
-  }
-}
 
+  if (driverResult.rowCount === 0) {
+    throw new Error('La licencia no pertenece al DNI proporcionado.');
+  }
+
+  // Validar placa asociada a la licencia
+  const vehicleResult = await pool.query(
+    `SELECT * FROM registered_vehicles WHERE license = $1 AND plate = $2`,
+    [license, plate]
+  );
+
+  if (vehicleResult.rowCount === 0) {
+    throw new Error('La placa no pertenece a la licencia proporcionada.');
+  }
+
+  // Todo correcto
+  return true;
+}
