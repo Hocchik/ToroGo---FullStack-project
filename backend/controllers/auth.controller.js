@@ -1,9 +1,20 @@
 import * as authService from '../services/auth.service.js';
 
-// REGISTER
+// REGISTER USER
 export const registerUser = async (req, res) => {
   try {
     const result = await authService.registerUser(req.body);
+    res.status(result.status).json(result.data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Registration failed' });
+  }
+};
+
+// REGISTER DRIVER
+export const registerDriver = async (req, res) => {
+  try {
+    const result = await authService.registerDriver(req.body);
     res.status(result.status).json(result.data);
   } catch (err) {
     console.error(err);

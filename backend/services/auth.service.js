@@ -1,28 +1,31 @@
+// ...existing code...
 import {
   createUser,
   findUserByDNI,
   findUserByEmailOrPhone,
 } from './user.service.js';
 import { createPassenger } from './passenger.service.js';
-import { createDriver } from './driver.service.js';
+import {
+  createDriver,
+  doesLicenseBelongsToDriver,
+  doesPlateBelongToVehicle,
+} from './driver.service.js';
 import { getUserRoles } from './role.service.js';
 import { generateToken } from '../utils/tokenUtils.js';
 import bcrypt from 'bcrypt';
+// ...existing code...
 
 export const registerUser = async (RegisterDto) => {
+  const validation = await checkFormHasNoBlankGaps(RegisterDto);
+
+  // si el form no ha sido completado, se le avisa al usuario que debe completarlo
+  if (!validation.valid) {
+    return validation;
+  }
+
+  // si el form está completo, se continua con el flujo:
   const { full_name, dni, age, email, phone, password, role } = RegisterDto;
 
-  if (!email && !phone) {
-    return {
-      status: 400,
-      data: { error: 'Email or phone number is required' },
-    };
-  }
-
-  const existingUser = await findUserByDNI(dni);
-  if (existingUser) {
-    return { status: 409, data: { error: 'DNI already registered' } };
-  }
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = await createUser({
@@ -32,8 +35,10 @@ export const registerUser = async (RegisterDto) => {
     email,
     phone,
     password: hashedPassword,
+    role,
   });
 
+  // se puede eliminar
   if (role === 'passenger') {
     if (age < 18) {
       return {
@@ -43,10 +48,13 @@ export const registerUser = async (RegisterDto) => {
     }
     await createPassenger({ user_id: user.id });
   }
+  //------------------------
 
+  // se puede eliminar
   if (role === 'driver') {
-    await createDriver(user.id);
+    await createDriver({ user_id: user.id });
   }
+  //-------------------------
 
   const token = generateToken({
     userId: user.id,
@@ -71,50 +79,97 @@ export const registerUser = async (RegisterDto) => {
   };
 };
 
-export const loginUser = async (LoginDto) => {
-  const { identifier, password } = LoginDto;
+// función que verifica que el formulario en uso haya sido llenado completamente
+const checkFormHasNoBlankGaps = async (RegisterDto) => {
+const { email, phone, dni } = RegisterDto;
 
-  const user = await findUserByEmailOrPhone(identifier);
-  if (!user) {
-    return { status: 404, data: { error: 'User not found' } };
-  }
-
-  const valid = await bcrypt.compare(password, user.password);
-  if (!valid) {
-    return { status: 401, data: { error: 'Invalid credentials' } };
-  }
-
-  const roles = await getUserRoles(user.id);
-
-  if (roles.length === 1) {
-    const token = generateToken({
-      userId: user.id,
-      dni: user.dni,
-      role: roles[0],
-    });
-
+  if (!email && !phone) {
     return {
-      status: 200,
-      data: {
-        message: 'Login successful',
-        token,
-        role: roles[0],
-        user: {
-          id: user.id,
-          full_name: user.full_name,
-          dni: user.dni,
-          email: user.email,
-          phone: user.phone,
-        },
-      },
+      valid: false,
+      status: 400,
+      data: { error: 'Email or phone number is required' },
     };
   }
 
-  return {
-    status: 200,
+  if (!dni) {
+    return {
+      valid: false,
+      status: 400,
+      data: { error: 'DNI is required' },
+    };
+  }
+
+  const existingUser = await findUserByDNI(dni);
+  if (existingUser) {
+    return { valid: false, status: 409, data: { error: 'DNI already registered' } };
+  }
+
+  return { valid: true };
+};
+// ...existing code...
+
+export const registerDriver = async (RegisterDriverDto) => {
+  const {
+    full_name,
+    dni,
+    age,
+    email,
+    phone,
+    password,
+    role,
+    license,
+    plate,
+  } = RegisterDriverDto;
+
+  // verificamos se hayan llenado todos los campos del form
+  const validation = await checkFormHasNoBlankGaps(RegisterDriverDto);
+
+  // si el form no ha sido completado, se le avisa al usuario que debe completarlo
+  if (!validation.valid) {
+    console.log("Se tienen que completar todos los campos del form");
+    return validation;
+  }
+
+  // si el form está completo, se continua con el flujo:
+
+  /* verificamos que la licencia exista y le pertenezca al driver al igual que
+     la placa del vehiculo 
+  */
+ console.log("license:....",license)
+  const doesLicenseExist = await doesLicenseBelongsToDriver(license);
+  const doesPlateExist = await doesPlateBelongToVehicle(plate);
+
+  if (!doesLicenseExist) {
+    return { status: 404, data: { error: 'No se encontró la licencia' } };
+  }
+  if (!doesPlateExist) {
+    return { status: 404, data: { error: 'No se encontró la placa' } };
+  }
+
+  // creamos el usuario
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const user = await createUser({
+    full_name,
+    dni,
+    phone,
+    email,
+    age,
+    password: hashedPassword,
+    role,
+  })
+
+    // creamos al driver
+    const driver = createDriver({
+    user_id: user.id,
+    license,
+    plate,
+    full_name,
+  });
+  
+    return {
+    status: 201,
     data: {
-      message: 'Multiple roles detected',
-      roles,
+      message: 'Driver registered successfully',
       user: {
         id: user.id,
         full_name: user.full_name,
@@ -122,28 +177,8 @@ export const loginUser = async (LoginDto) => {
         email: user.email,
         phone: user.phone,
       },
+      driver,
     },
   };
 };
-
-export const selectActiveRole = async (user, role) => {
-  const { userId, dni } = user;
-  const roles = await getUserRoles(userId);
-  if (!roles.includes(role)) {
-    return {
-      status: 403,
-      data: { error: 'Role not assigned to this user' },
-    };
-  }
-
-  const token = generateToken({ userId, dni, role });
-
-  return {
-    status: 200,
-    data: {
-      message: `Role '${role}' activated`,
-      token,
-      role,
-    },
-  };
-};
+// ...existing code...

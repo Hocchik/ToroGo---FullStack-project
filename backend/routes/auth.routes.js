@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerUser, loginUser, selectActiveRole } from '../controllers/auth.controller.js';
+import { registerUser, registerDriver, loginUser, selectActiveRole } from '../controllers/auth.controller.js';
 import { authenticate } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
@@ -24,6 +24,8 @@ router.post('/select-role', authenticate, selectActiveRole);
  * @access Public
  */
 router.post('/register', registerUser);
+
+router.post('/register/driver', registerDriver);
 
 
 export default router;

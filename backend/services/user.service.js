@@ -1,11 +1,13 @@
 import pool from '../config/dbConfig.js';
 
-export const createUser = async ({ full_name, dni, age, email, phone, password }) => {
+export const createUser = async ({ full_name, dni, age, email, phone, password, role }) => {
+  const id = Math.floor(Math.random() * 10000)
   const result = await pool.query(
-    `INSERT INTO users (full_name, dni, age, email, phone, password)
-     VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-    [full_name, dni, age, email, phone, password]
+    `INSERT INTO users (id, full_name, dni, phone, email, age, password, role)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+    [id, full_name, dni, phone, email, age, password, role]
   );
+  console.log("resultado:......",result);
   return result.rows[0];
 };
 
