@@ -3,10 +3,11 @@ export interface RegisterRequest {
   dni: string;
   age: number;
   email: string;
-  phone: string;
   password: string;
+  phone: string;
+  plate: string;
+  license: string;
   role: string;
-  guardian_id?: number;
 }
 
 export interface LoginRequest {

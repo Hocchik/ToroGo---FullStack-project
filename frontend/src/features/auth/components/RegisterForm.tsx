@@ -18,8 +18,10 @@ export const RegisterForm = () => {
     dni: '',
     age: '',
     email: '',
-    phone: '',
     password: '',
+    phone: '',
+    plate: '',
+    license: '',
     role: 'driver'
   });
 
@@ -70,13 +72,6 @@ export const RegisterForm = () => {
         placeholder="Email"
         className="w-full px-4 py-4 border border-gray-300 rounded-lg bg-gray-50 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
       />
-      <input
-        type="tel"
-        value={formData.phone}
-        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-        placeholder="Número de teléfono"
-        className="w-full px-4 py-4 border border-gray-300 rounded-lg bg-gray-50 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
-      />
       <div>
         <label htmlFor="password" className="sr-only">
           Contraseña
@@ -102,6 +97,28 @@ export const RegisterForm = () => {
           </button>
         </div>
       </div>
+      <input
+        type="tel"
+        value={formData.phone}
+        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+        placeholder="Número de teléfono"
+        className="w-full px-4 py-4 border border-gray-300 rounded-lg bg-gray-50 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
+      />
+      <input
+        type='text'
+        value={formData.plate}
+        onChange={(e) => setFormData({...formData, plate: e.target.value})}
+        placeholder='Placa de mototaxi'
+        className="w-full px-4 py-4 border border-gray-300 rounded-lg bg-gray-50 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
+      />
+      <input
+        type='text'
+        value={formData.license}
+        onChange={(e) => setFormData({...formData, license: e.target.value})}
+        placeholder='Licencia de conducir'
+        className="w-full px-4 py-4 border border-gray-300 rounded-lg bg-gray-50 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
+      />
+
       <button
         type="submit"
         disabled={status === 'loading'}
