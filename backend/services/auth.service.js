@@ -15,8 +15,9 @@ import { generateToken } from '../utils/tokenUtils.js';
 import bcrypt from 'bcrypt';
 // ...existing code...
 
-export const registerUser = async (RegisterDto) => {
-  const validation = await checkFormHasNoBlankGaps(RegisterDto);
+// Registrar pasajeros
+export const registerPassenger = async (RegisterPassengerDto) => {
+  const validation = await validateData(RegisterPassengerDto, "PASSENGER");
 
   // si el form no ha sido completado, se le avisa al usuario que debe completarlo
   if (!validation.valid) {
@@ -24,7 +25,7 @@ export const registerUser = async (RegisterDto) => {
   }
 
   // si el form está completo, se continua con el flujo:
-  const { full_name, dni, age, email, phone, password, role } = RegisterDto;
+  const { full_name, dni, age, email, phone, password, role } = RegisterPassengerDto;
 
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -38,23 +39,23 @@ export const registerUser = async (RegisterDto) => {
     role,
   });
 
-  // se puede eliminar
-  if (role === 'passenger') {
-    if (age < 18) {
-      return {
-        status: 400,
-        data: { error: 'Minors must have a guardian' },
-      };
-    }
-    await createPassenger({ user_id: user.id });
-  }
-  //------------------------
+  // // se puede eliminar
+  // if (role === 'passenger') {
+  //   if (age < 18) {
+  //     return {
+  //       status: 400,
+  //       data: { error: 'Minors must have a guardian' },
+  //     };
+  //   }
+  //   await createPassenger({ user_id: user.id });
+  // }
+  // //------------------------
 
-  // se puede eliminar
-  if (role === 'driver') {
-    await createDriver({ user_id: user.id });
-  }
-  //-------------------------
+  // // se puede eliminar
+  // if (role === 'driver') {
+  //   await createDriver({ user_id: user.id });
+  // }
+  // //-------------------------
 
   const token = generateToken({
     userId: user.id,
@@ -79,52 +80,11 @@ export const registerUser = async (RegisterDto) => {
   };
 };
 
-export const loginUser = async (email, password) => {
-  const does_user_exist = await logIn(email,password)
-
-  if(!does_user_exist){
-    return {
-      valid: false,
-      status: 400,
-      data:{error : "El usuario no existe"} 
-    }
-  }
-
-  return console.log("inicio de sesión exitoso!!!")
-}
-
-// función que verifica que el formulario en uso haya sido llenado completamente
-const checkFormHasNoBlankGaps = async (RegisterDto) => {
-const { email, phone, dni } = RegisterDto;
-
-  if (!email && !phone) {
-    return {
-      valid: false,
-      status: 400,
-      data: { error: 'Email or phone number is required' },
-    };
-  }
-
-  if (!dni) {
-    return {
-      valid: false,
-      status: 400,
-      data: { error: 'DNI is required' },
-    };
-  }
-
-  const existingUser = await findUserByDNI(dni);
-  if (existingUser) {
-    return { valid: false, status: 409, data: { error: 'DNI already registered' } };
-  }
-
-  return { valid: true };
-};
-// ...existing code...
-
+// Registrar conductores
 export const registerDriver = async (RegisterDriverDto) => {
   const {
-    full_name,
+    name,
+    lastName,
     dni,
     age,
     email,
@@ -135,16 +95,19 @@ export const registerDriver = async (RegisterDriverDto) => {
     plate,
   } = RegisterDriverDto;
 
-  // verificamos se hayan llenado todos los campos del form
-  const validation = await checkFormHasNoBlankGaps(RegisterDriverDto);
+  /*
+    validaciones de los campos
+  */
+
+  // verificamos se hayan llenado todos los campos del form correctament
+  const validation = await validateData(RegisterDriverDto, "DRIVER");
+
 
   // si el form no ha sido completado, se le avisa al usuario que debe completarlo
   if (!validation.valid) {
     console.log("Se tienen que completar todos los campos del form");
     return validation;
   }
-
-  // si el form está completo, se continua con el flujo:
 
   /* 
      verificamos que la licencia exista y le pertenezca al driver al igual que
@@ -196,4 +159,181 @@ export const registerDriver = async (RegisterDriverDto) => {
     },
   };
 };
+
+// Inicio de sesión (pasajeros y conductores)
+export const loginUser = async (email, password) => {
+  const does_user_exist = await logIn(email,password)
+
+  if(!does_user_exist){
+    return {
+      valid: false,
+      status: 400,
+      data:{error : "El usuario no existe"} 
+    }
+  }
+
+  return console.log("inicio de sesión exitoso!!!")
+}
+
+// Funcion que valida que los campos de los formularios de registro de pasajeros y conductores hayan sido llenados correctamente
+const validateData = async (RegisterDto, rol) => {
+
+  /*
+    Validaciones generales ------------------------------------------------------------
+  */
+  
+  const {dni, phone, email, age, password, role, name, last_name} = RegisterDto;
+  
+  // Eliminamos espacios vacios del DNI
+  // Validamos que el campo del DNI haya sido completado.
+  // Validamos que el DNI solo tenga números
+  // Validamos que el DNI tenga 8 caracteres.
+  // Validamos que el DNI ingresado no exista en la bd
+
+  dni.trim();
+
+  if (!dni) {
+    return {
+      valid: false,
+      status: 400,
+      data: { error: 'Debe ingresar un DNI' },
+    };
+  }
+
+  if(!/^\d+$/.test(dni)) {
+    return {
+      valid: false,
+      status: 400,
+      data: {error: 'El DNI no puede contener letras, solo números'}
+    }
+  }
+  
+  if(dni.length != 8) {
+    return new Error("El DNI debe tener 8 digitos");
+  }
+
+  const existingUser = await findUserByDNI(dni);
+  if (existingUser) {
+    return { 
+      valid: false,
+      status: 409,
+      data: { error: 'DNI ya registrado' } };
+  }
+
+  // Eliminamos espacios vacios del phone
+  // Validamos que el campo phone haya sido completado
+  // Validamos que se incluya antes del phone el código de Perú (+51)
+  // Validamos que phone empiece con 9
+  // Validamos que phone tenga 9 digitos
+  // Validamos que phone solo tenga números
+
+  phone.trim();
+
+  if(!phone) {
+    return {
+      valid: false,
+      status: 400,
+      data: { error: 'Debe ingresar un número de teléfono'}
+    }
+  }
+
+  if(phone.substring(0,2) != '+51') {
+    return {
+      valid: false,
+      status: 400,
+      data: { error: 'Antes del número de teléfono debe incluir el código de Perú (+51)'}
+    }
+  }
+
+  if(phone[3] != '9' && phone.substring(3, phone.length-1).length != 9) {
+    return {
+      valid: false,
+      status: 400,
+      data: { error: 'El número de teléfono debe iniciar con 9 y debe tener 9 digitos'}
+    }
+  }
+
+  // Eliminamos espacios vacios del email
+  // Validamos que el campo del email haya sido completado
+  // Validamos que el campo incluya el @
+  if (!email) {
+    return {
+      valid: false,
+      status: 400,
+      data: { error: 'Debe ingresar un correo electrónico' },
+    };
+  }
+
+  if(!email.includes("@")) {
+    return {
+      valid: false,
+      status: 400,
+      data: { error: 'Debe ingresar un correo electrónico válido' },
+    };
+  }
+
+  // Validamos que el campo age haya sido completado
+  // Validamos que el usuario sea mayor de edad (>=18)
+
+  if(!age) {
+    return {
+      valid: false,
+      status: 400,
+      data: { error: 'Debe ingresar su edad' }
+    };
+  }
+
+  if(edad < 18) {
+    return {
+      valid: false,
+      status: 400,
+      data: { error: 'Debe ser mayor de edad para poder registrarse' }
+    };
+  }
+
+  // Validamos que el campo password haya sido completado
+  if(!password) {
+    return {
+      valid: false,
+      status: 400,
+      data: { error: 'Debe ingresar una contraseña' }
+    };
+  }
+
+  // Validamos que el campo name y last_name hayan sido completados
+  if(!name || !last_name) {
+    return {
+      valid: false,
+      status: 400,
+      data: { error: 'Debe ingresar su nombre y apellido' }
+    };
+  }
+
+
+  //------------------------------------------------------------------------------------
+
+  if(role == "DRIVER") {
+    const { dni, phone, email, age, password, role, name, last_name, license, plate } = RegisterDto;
+
+    // Validaciones de la placa y la licencia
+    // ...
+
+    // Si pasa las validaciones, @returns {valid = true} 
+     return {
+      valid: true,
+      status: 200,
+      data: { message: 'Validacion exitosa' }
+    };
+  }
+
+  // Si role == 'PASSENGER' y ha pasado todas las validaciones, @returns {valid = true}
+  return {
+      valid: true,
+      status: 200,
+      data: { message: 'Validacion exitosa' }
+    };
+
+}
+
+
 // ...existing code...

@@ -1,6 +1,6 @@
 import * as authService from '../services/auth.service.js';
 
-// REGISTER USER
+// Registro de pasajeros
 export const registerUser = async (req, res) => {
   try {
     const result = await authService.registerUser(req.body);
@@ -11,7 +11,7 @@ export const registerUser = async (req, res) => {
   }
 };
 
-// REGISTER DRIVER
+// Registro de conductores
 export const registerDriver = async (req, res) => {
   try {
     const result = await authService.registerDriver(req.body);
@@ -22,7 +22,7 @@ export const registerDriver = async (req, res) => {
   }
 };
 
-// LOGIN
+// Inicio de sesión (para pasajeros y conductores)
 export const loginUser = async (req, res) => {
   try {
     const result = await authService.loginUser(req.body);
