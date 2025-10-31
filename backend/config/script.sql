@@ -11,7 +11,6 @@ CREATE TABLE users (
 CREATE TABLE passengers (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id),
-  guardian_id INTEGER REFERENCES users(id)
 );
 
 CREATE TABLE drivers (

@@ -4,12 +4,12 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import { Server } from 'socket.io';
-import dotenv from 'dotenv';
 
 import authRoutes from './routes/auth.routes.js';
 import tripRoutes from './routes/trip.routes.js';
 import motorcycleRoutes from './routes/motorcycle.routes.js';
 import passwordRoutes from './routes/password.routes.js';
+import testRoutes from './routes/dbTest.routes.js';
 
 import swaggerUi from 'swagger-ui-express';
 
@@ -21,6 +21,7 @@ const swaggerDocument = JSON.parse(fs.readFileSync(swaggerPath, 'utf8'));
 
 const app = express();
 const server = http.createServer(app);
+
 const io = new Server(server, {
   cors: { origin: '*' }
 });
@@ -36,26 +37,14 @@ app.use('/api/auth', authRoutes);
 app.use('/api/trips', tripRoutes);
 app.use('/api/motorcycles', motorcycleRoutes);
 app.use('/api/password', passwordRoutes);
-
-// Socket.IO para seguimiento GPS
-io.on('connection', (socket) => {
-  console.log('🟢 Socket conectado:', socket.id);
-
-  socket.on('join-trip', (tripId) => {
-    socket.join(`trip-${tripId}`);
-  });
-
-  socket.on('driver-location', ({ tripId, lat, lng }) => {
-    io.to(`trip-${tripId}`).emit('trip-location', { lat, lng });
-  });
-
-  socket.on('disconnect', () => {
-    console.log('🔴 Socket desconectado:', socket.id);
-  });
-});
+app.use('/api/test', testRoutes);
 
 // Inicializar servidor
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+//const pgpInstance = pgp();
+//const db = pgp('postgresql://localhost:5432/mototaxi_app?postgres');
+
+

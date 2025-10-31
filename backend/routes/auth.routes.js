@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerUser, loginUser, selectActiveRole } from '../controllers/auth.controller.js';
+import { registerUser, registerDriver, loginUser, selectActiveRole } from '../controllers/auth.controller.js';
 import { authenticate } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
@@ -10,19 +10,23 @@ const router = express.Router();
  * @access Public
  */
 router.post('/login', loginUser);
+/*
 
-/**
- * @route POST /api/auth/select-role
- * @desc Select active role and receive new token
- * @access Protected
- */
 router.post('/select-role', authenticate, selectActiveRole);
+*/
 
 /**
  * @route POST /api/auth/register
  * @desc Register new user with role
  * @access Public
  */
+
+//Ruta para registrar pasajeros
 router.post('/register', registerUser);
+
+
+// Ruta para registrar conductores
+router.post('/register/driver', registerDriver);
+
 
 export default router;
