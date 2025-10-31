@@ -16,12 +16,11 @@ import { AboutPage } from '../features/home/pages/AboutPage';
 import { ContactPage } from '../features/home/pages/ContactPage';
 import { DriverRequire } from '../features/home/pages/DriverRequire';
 
-// Auth Pages
+// Auth Pages for passengers
 import { AuthPage } from '../features/auth/pages/AuthPage';
-/* import { RequestTrip } from '../features/passenger/pages/RequestTrip';
 
-import { LoginForm } from '../features/auth/components/LoginForm';
-import { RegisterForm } from '../features/auth/components/RegisterForm'; */
+// Auth Pages for drivers
+import {DriverAuthPage} from '../features/driver/pages/DriverAuthPage'
 
 // Protected Pages
 import { PassengerPage } from '../features/passenger/pages/PassengerPage';
@@ -79,8 +78,11 @@ export const AppRouter = () => {
         {/* Rutas de servicio - Conductor */}
         <Route path='/service/driver' element={<DriverPage/>}/>
 
-        {/* Rutas de Autenticación */}
+        {/* Rutas de Autenticación (pasajero y conductor)*/}
         <Route path="/auth" element={<AuthPage />} />
+
+
+        {/* Ruta de registro de conductor */}
 
         {/* Rutas de recuperación de contraseña */}
         <Route path="/recover-password" element={<RecoverPassword />} />
