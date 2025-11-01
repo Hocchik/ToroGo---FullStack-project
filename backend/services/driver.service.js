@@ -1,10 +1,12 @@
 import pool from '../config/dbConfig.js';
+import crypto from 'crypto';
 
 export const createDriver = async (driver) => {
-  const {user_id, license, plate, full_name} = driver;
+  const {user_id, license, plate} = driver;
+  const id = crypto.randomUUID();
   const result = await pool.query(
-    `INSERT INTO drivers (user_id, license, plate, full_name) VALUES ($1, $2, $3, $4) RETURNING *`,
-    [user_id, license, plate, full_name]
+    `INSERT INTO drivers (license, plate, id, user_id) VALUES ($1, $2, $3, $4) RETURNING *`,
+    [license, plate, id, user_id]
   );
   return result.rows[0];
 };
@@ -19,21 +21,49 @@ export const finbyId = async (id) => {
 
 // Puedes agregar más funciones aquí según lo necesites
 
-export const validateDriverData = async(dni, license, plate) => {
-  // Validar licencia con el DNI
+export const validateDriverData = async(dni, license, plate, name, last_name) => {
+  // Validar que el DNI del conductor exista
   const driverResult = await pool.query(
-    `SELECT * FROM registered_drivers WHERE license = $1 AND dni = $2`,
-    [license, dni]
+    `SELECT * FROM registered_drivers WHERE dni = $1 AND name = $2 AND last_name = $3`,
+    [dni, name, last_name]
   );
 
   if (driverResult.rowCount === 0) {
-    throw new Error('La licencia no pertenece al DNI proporcionado.');
+    throw new Error(
+      "Los datos proporcionados (dni, nombre y apellido) no figuran en la base de datos de la SUNARP. Verifique que los datos sean correctos."
+    );
   }
 
-  // Validar placa asociada a la licencia
+  // Validar que la licencia del conductor esté registrada en la bd
+  const driverId = driverResult.rows[0].id;
+
+  const driverLicenseResult = await pool.query(
+    `SELECT * FROM drivers_license WHERE id_registered_driver = $1 AND license_number = $2`,
+    [driverId, license]
+  );
+
+  if(driverLicenseResult.rowCount === 0) {
+    throw new Error(`El conductor con id ${driverId} no tiene licencia de conducir registrada`)
+  }
+
+  // Validar que la licencia no haya vencido
+  const licenseExpirationDate = new Date(driverLicenseResult.rows[0].expiration_date);
+  const currentDate = new Date();
+  
+  // Establecer ambas fechas (actual y la fecha de expiracion de la licencia)
+  // para una mejor comparacion
+  const today = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+  const expiration = new Date(licenseExpirationDate.getFullYear(), licenseExpirationDate.getMonth(), licenseExpirationDate.getDate());
+
+  if (expiration < today) {
+    throw new Error(`La licencia ${license} venció el ${licenseExpirationDate.toLocaleDateString()}`);
+  }
+
+  // Validar que la placa del vehiculo le pertenezca al conductor
+
   const vehicleResult = await pool.query(
-    `SELECT * FROM registered_vehicles WHERE license = $1 AND plate = $2`,
-    [license, plate]
+    `SELECT * FROM registered_vehicles WHERE driver_id = $1 AND plate = $2`,
+    [driverId, plate]
   );
 
   if (vehicleResult.rowCount === 0) {

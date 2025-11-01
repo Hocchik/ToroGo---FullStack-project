@@ -25,12 +25,13 @@ export const registerPassenger = async (RegisterPassengerDto) => {
   }
 
   // si el form está completo, se continua con el flujo:
-  const { full_name, dni, age, email, phone, password, role } = RegisterPassengerDto;
+  const { name, last_name, dni, age, email, phone, password, role } = RegisterPassengerDto;
 
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = await createUser({
-    full_name,
+    name,
+    last_name,
     dni,
     age,
     email,
@@ -71,7 +72,8 @@ export const registerPassenger = async (RegisterPassengerDto) => {
       role,
       user: {
         id: user.id,
-        full_name: user.full_name,
+        name: user.name,
+        last_name: user.last_name,
         dni: user.dni,
         email: user.email,
         phone: user.phone,
@@ -84,7 +86,7 @@ export const registerPassenger = async (RegisterPassengerDto) => {
 export const registerDriver = async (RegisterDriverDto) => {
   const {
     name,
-    lastName,
+    last_name,
     dni,
     age,
     email,
@@ -93,6 +95,8 @@ export const registerDriver = async (RegisterDriverDto) => {
     role,
     license,
     plate,
+    insurance_policy,
+    expiration_date,
   } = RegisterDriverDto;
 
   /*
@@ -103,10 +107,8 @@ export const registerDriver = async (RegisterDriverDto) => {
   const validation = await validateData(RegisterDriverDto, "DRIVER");
 
 
-  // si el form no ha sido completado, se le avisa al usuario que debe completarlo
   if (!validation.valid) {
-    console.log("Se tienen que completar todos los campos del form");
-    return validation;
+    throw new Error(validation.data.error);
   }
 
   /* 
@@ -114,7 +116,7 @@ export const registerDriver = async (RegisterDriverDto) => {
      la placa del vehiculo 
   */
 
-  const is_data_valid = await validateDriverData(dni, license, plate);
+  const is_data_valid = await validateDriverData(dni, license, plate, name, last_name);
 
   if (!is_data_valid) {
     return {
@@ -127,7 +129,8 @@ export const registerDriver = async (RegisterDriverDto) => {
   // creamos el usuario
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = await createUser({
-    full_name,
+    name,
+    last_name,
     dni,
     phone,
     email,
@@ -141,7 +144,6 @@ export const registerDriver = async (RegisterDriverDto) => {
     user_id: user.id,
     license,
     plate,
-    full_name,
   });
   
     return {
@@ -150,7 +152,8 @@ export const registerDriver = async (RegisterDriverDto) => {
       message: 'Driver registered successfully',
       user: {
         id: user.id,
-        full_name: user.full_name,
+        name: user.name,
+        last_name: user.last_name,
         dni: user.dni,
         email: user.email,
         phone: user.phone,
@@ -176,13 +179,13 @@ export const loginUser = async (email, password) => {
 }
 
 // Funcion que valida que los campos de los formularios de registro de pasajeros y conductores hayan sido llenados correctamente
-const validateData = async (RegisterDto, rol) => {
+const validateData = async (RegisterDto) => {
 
   /*
     Validaciones generales ------------------------------------------------------------
   */
   
-  const {dni, phone, email, age, password, role, name, last_name} = RegisterDto;
+  const {dni, phone, email, age, password, name, last_name, role} = RegisterDto;
   
   // Eliminamos espacios vacios del DNI
   // Validamos que el campo del DNI haya sido completado.
@@ -190,9 +193,9 @@ const validateData = async (RegisterDto, rol) => {
   // Validamos que el DNI tenga 8 caracteres.
   // Validamos que el DNI ingresado no exista en la bd
 
-  dni.trim();
+  const trimedDNI = dni.trim();
 
-  if (!dni) {
+  if (!trimedDNI) {
     return {
       valid: false,
       status: 400,
@@ -200,7 +203,7 @@ const validateData = async (RegisterDto, rol) => {
     };
   }
 
-  if(!/^\d+$/.test(dni)) {
+  if(!/^\d+$/.test(trimedDNI)) {
     return {
       valid: false,
       status: 400,
@@ -208,11 +211,11 @@ const validateData = async (RegisterDto, rol) => {
     }
   }
   
-  if(dni.length != 8) {
+  if(trimedDNI.length != 8) {
     return new Error("El DNI debe tener 8 digitos");
   }
 
-  const existingUser = await findUserByDNI(dni);
+  const existingUser = await findUserByDNI(trimedDNI);
   if (existingUser) {
     return { 
       valid: false,
@@ -227,9 +230,8 @@ const validateData = async (RegisterDto, rol) => {
   // Validamos que phone tenga 9 digitos
   // Validamos que phone solo tenga números
 
-  phone.trim();
-
-  if(!phone) {
+  const trimedPhone = phone.trim();
+  if(!trimedPhone) {
     return {
       valid: false,
       status: 400,
@@ -237,7 +239,7 @@ const validateData = async (RegisterDto, rol) => {
     }
   }
 
-  if(phone.substring(0,2) != '+51') {
+  if(trimedPhone.substring(0,3) != '+51') {
     return {
       valid: false,
       status: 400,
@@ -245,7 +247,7 @@ const validateData = async (RegisterDto, rol) => {
     }
   }
 
-  if(phone[3] != '9' && phone.substring(3, phone.length-1).length != 9) {
+  if(trimedPhone[3] != '9' && trimedPhone.substring(3, trimedPhone.length-1).length != 9) {
     return {
       valid: false,
       status: 400,
@@ -256,7 +258,9 @@ const validateData = async (RegisterDto, rol) => {
   // Eliminamos espacios vacios del email
   // Validamos que el campo del email haya sido completado
   // Validamos que el campo incluya el @
-  if (!email) {
+  const trimedEmail = email.trim();
+
+  if (!trimedEmail) {
     return {
       valid: false,
       status: 400,
@@ -264,7 +268,7 @@ const validateData = async (RegisterDto, rol) => {
     };
   }
 
-  if(!email.includes("@")) {
+  if(!trimedEmail.includes("@")) {
     return {
       valid: false,
       status: 400,
@@ -283,7 +287,7 @@ const validateData = async (RegisterDto, rol) => {
     };
   }
 
-  if(edad < 18) {
+  if(age < 18) {
     return {
       valid: false,
       status: 400,
@@ -313,25 +317,74 @@ const validateData = async (RegisterDto, rol) => {
   //------------------------------------------------------------------------------------
 
   if(role == "DRIVER") {
-    const { dni, phone, email, age, password, role, name, last_name, license, plate } = RegisterDto;
+    const {license, plate } = RegisterDto;
 
     // Validaciones de la placa y la licencia
-    // ...
+    // Validamos que el campo license y plate hayan sido completados
+    if(!license || !plate) {
+      return {
+        valid: false,
+        status: 400,
+        data: { error: 'Debe ingresar su licencia y placa del vehículo' }
+      };
+    }
+
+    // Validamos que la licencia tenga el formato correcto (ejemplo: A06702426) y que tenga 9 caracteres
+    const licensePattern = /^[A-Z]\d{8}$/;
+    if(!licensePattern.test(license)) {
+      return {
+        valid: false,
+        status: 400,
+        data: { error: 'La licencia debe tener el formato correcto (ejemplo: A06702426) y 9 caracteres' }
+      };
+    }
+
+    // Validamos que la placa tenga 7 caracteres (contando el -)
+    const plateLength = plate.length;
+    if(plateLength != 7) {
+      return {
+        valid: false,
+        status: 400,
+        data: { error: 'La placa debe tener 7 caracteres contando el guion (-)' }
+      };
+    }
+
+    // Validamos que la placa empiece con 2 letras y termine con 6 numeros
+    const plateLetters = plate.substring(0,1);
+    const plateNumbers = plate.substring(3, 6);
+
+    const plateLettersPattern = /^[a-zA-Z]+$/.test(plateLetters);
+    const plateNumbersPattern = /^\d+$/.test(plateNumbers)
+    
+    if(!plateLettersPattern || !plateNumbersPattern) {
+       return {
+        valid: false,
+        status: 400,
+        data: { error: 'La placa debe empezar con 2 letras y terminar con 6 numeros'}
+      };
+    }
+
+    // Validaciones del seguro de poliza y su fecha de expiracion
+    
 
     // Si pasa las validaciones, @returns {valid = true} 
      return {
       valid: true,
       status: 200,
-      data: { message: 'Validacion exitosa' }
+      data: { message: 'Validacion exitosa del conductor'}
+    };
+  }
+
+  if(role == 'PASSENGER'){
+      return {
+      valid: true,
+      status: 200,
+      data: { message: 'Validacion exitosa del pasajero' }
     };
   }
 
   // Si role == 'PASSENGER' y ha pasado todas las validaciones, @returns {valid = true}
-  return {
-      valid: true,
-      status: 200,
-      data: { message: 'Validacion exitosa' }
-    };
+
 
 }
 

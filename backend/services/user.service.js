@@ -1,7 +1,7 @@
 import pool from '../config/dbConfig.js';
 
 export const createUser = async ({ name, last_name, dni, age, email, phone, password, role }) => {
-  const id = Math.floor(Math.random() * 10000)
+  const id = crypto.randomUUID(); 
   const result = await pool.query(
     `INSERT INTO users (id, name, last_name, dni, phone, email, age, password, role)
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,

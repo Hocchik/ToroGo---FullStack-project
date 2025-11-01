@@ -5,13 +5,10 @@
 -- DROP TABLE public.registered_drivers;
 
 CREATE TABLE public.registered_drivers (
-	license text NOT NULL,
-	is_license_expired bool NULL,
 	dni text NULL,
 	"name" text NULL,
 	last_name text NULL,
 	id uuid NOT NULL,
-	CONSTRAINT registered_drivers_license_key UNIQUE (license),
 	CONSTRAINT registered_drivers_pkey PRIMARY KEY (id)
 );
 
@@ -68,6 +65,24 @@ CREATE TABLE public.drivers (
 );
 
 
+-- public.drivers_license definition
+
+-- Drop table
+
+-- DROP TABLE public.drivers_license;
+
+CREATE TABLE public.drivers_license (
+	id uuid NOT NULL,
+	license_number text NOT NULL,
+	id_registered_driver uuid NOT NULL,
+	issue_date date NOT NULL,
+	expiration_date date NOT NULL,
+	license_type text NULL,
+	CONSTRAINT drivers_license_pkey PRIMARY KEY (id, id_registered_driver),
+	CONSTRAINT fk_id_registered_driver FOREIGN KEY (id_registered_driver) REFERENCES public.registered_drivers(id)
+);
+
+
 -- public.motorcycles definition
 
 -- Drop table
@@ -109,11 +124,28 @@ CREATE TABLE public.passengers (
 CREATE TABLE public.registered_vehicles (
 	plate text NOT NULL,
 	brand text NOT NULL,
-	license text NOT NULL,
 	driver_id uuid NOT NULL,
-	CONSTRAINT registered_vehicles_license_key UNIQUE (license),
 	CONSTRAINT registered_vehicles_pkey PRIMARY KEY (plate),
 	CONSTRAINT registered_vehicles_id_fkey FOREIGN KEY (driver_id) REFERENCES public.registered_drivers(id)
+);
+
+
+-- public.soat_policies definition
+
+-- Drop table
+
+-- DROP TABLE public.soat_policies;
+
+CREATE TABLE public.soat_policies (
+	id_soat uuid NOT NULL,
+	insurance_policy varchar(50) NOT NULL,
+	expiration_date date NOT NULL,
+	vehicle_plate varchar(10) NOT NULL,
+	driver_id uuid NOT NULL,
+	CONSTRAINT soat_policies_insurance_policy_key UNIQUE (insurance_policy),
+	CONSTRAINT soat_policies_pkey PRIMARY KEY (id_soat),
+	CONSTRAINT fk_driver_id FOREIGN KEY (driver_id) REFERENCES public.registered_drivers(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+	CONSTRAINT fk_vehicle_plate FOREIGN KEY (vehicle_plate) REFERENCES public.registered_vehicles(plate) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 
