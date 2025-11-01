@@ -1,9 +1,9 @@
 export const contactPageStyles = {
   // Container principal
-  container: "bg-center bg-white min-h-screen",
+  container: "bg-center bg-white min-h-screen pt-16",
   
   // Header section
-  headerSection: "bg-[url('/src/assets/cliente.jpg')] bg-center bg-cover grid md:grid-cols-2 gap-12 items-center mb-16 min-h-[90vh] px-8 py-16 -mt-16 pt-20",
+  headerSection: "bg-[url('/src/assets/cliente.jpg')] bg-center bg-cover grid md:grid-cols-2 gap-12 items-center mb-16 min-h-[90vh] px-8 py-16 pt-20",
   headerTitle: "font-semibold text-black text-8xl mb-6",
   headerSubtitle: "font-semibold text-black text-2xl  mb-4 ",
   
@@ -26,14 +26,16 @@ export const contactPageStyles = {
   scheduleTitle: "text-2xl font-semibold mb-4",
   scheduleList: "space-y-2 text-gray-600",
   
-  // Mensaje
-  messageSection: "bg-white py-16 px-8",
-  messageTitle: "text-4xl font-bold text-gray-900 text-center mb-8",
-
+  // Sección del formulario con texto y form lado a lado
+  formContactSection: "bg-gray-50 py-16 px-8",
+  formContactContainer: "max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center",
+  formContactTextContent: "space-y-6",
+  formContactTitle: "text-4xl font-bold text-gray-900 mb-6 leading-tight",
+  formContactDescription: "text-gray-600 text-lg leading-relaxed",
+  
   // Formulario
-  formSection: "bg-gray-50 py-16 px-8",
-  formContainer: "max-w-2xl mx-auto",
-  form: "bg-white rounded-2xl shadow-xl p-8 space-y-8 ",
+  formContainer: "w-full",
+  form: "bg-white rounded-2xl shadow-xl p-8 space-y-6",
   formGroup: "space-y-2",
   label: "block text-sm font-semibold text-gray-700 mb-2",
   input: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500",
@@ -44,7 +46,7 @@ export const contactPageStyles = {
 
 export const ContactPage = () => {
   return (
-    <div className={contactPageStyles.container}>
+    <div className={contactPageStyles.container} style={{ fontFamily: 'Montserrat, sans-serif' }}>
       <div className={contactPageStyles.headerSection}>
         <h1 className={contactPageStyles.headerTitle}>Contáctanos</h1>
         <p className={contactPageStyles.headerSubtitle}>Estamos aquí para ayudarte</p>
@@ -88,49 +90,59 @@ export const ContactPage = () => {
             </div>
           </div>
 
-          <div className={contactPageStyles.messageSection}>
-            <h2 className={contactPageStyles.messageTitle}>¿Requiere de un mejor contacto?, por favor complete el siguiente formulario</h2>
-          </div>
+          <div className={contactPageStyles.formContactSection}>
+            <div className={contactPageStyles.formContactContainer}>
+              {/* Texto a la izquierda */}
+              <div className={contactPageStyles.formContactTextContent}>
+                <h2 className={contactPageStyles.formContactTitle}>
+                  ¿Requiere de un mejor contacto?, complete el siguiente formulario
+                </h2>
+                <p className={contactPageStyles.formContactDescription}>
+                  Estamos aquí para ayudarte con cualquier consulta o información que necesites. 
+                  Completa el formulario y nos pondremos en contacto contigo lo antes posible.
+                </p>
+              </div>
 
-          <div className={contactPageStyles.formSection}>
-            <div className={contactPageStyles.formContainer}>
-              <form className={contactPageStyles.form}>
-                <div className={contactPageStyles.formGroup}>
-                  <label className={contactPageStyles.label}>
-                    Nombre Completo
-                  </label>
-                  <input
-                    type="text"
-                    className={contactPageStyles.input}
-                    placeholder="NOMBRRE Y APELLIDOS"
-                  />
-                </div>
-                <div className={contactPageStyles.formGroup}>
-                  <label className={contactPageStyles.label}>
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    className={contactPageStyles.input}
-                    placeholder="ejemplo@email.com"
-                  />
-                </div>
-                <div className={contactPageStyles.formGroup}>
-                  <label className={contactPageStyles.label}>
-                    Mensaje
-                  </label>
-                  <textarea
-                    className={contactPageStyles.textarea}
-                    placeholder="¿Cómo podemos ayudarte?"
-                  ></textarea>
-                </div>
-                <button
-                  type="submit"
-                  className={contactPageStyles.button}
-                >
-                  Enviar Mensaje
-                </button>
-              </form>
+              {/* Formulario a la derecha */}
+              <div className={contactPageStyles.formContainer}>
+                <form className={contactPageStyles.form}>
+                  <div className={contactPageStyles.formGroup}>
+                    <label className={contactPageStyles.label}>
+                      Nombre Completo
+                    </label>
+                    <input
+                      type="text"
+                      className={contactPageStyles.input}
+                      placeholder="NOMBRE Y APELLIDOS"
+                    />
+                  </div>
+                  <div className={contactPageStyles.formGroup}>
+                    <label className={contactPageStyles.label}>
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      className={contactPageStyles.input}
+                      placeholder="ejemplo@email.com"
+                    />
+                  </div>
+                  <div className={contactPageStyles.formGroup}>
+                    <label className={contactPageStyles.label}>
+                      Mensaje
+                    </label>
+                    <textarea
+                      className={contactPageStyles.textarea}
+                      placeholder="¿Cómo podemos ayudarte?"
+                    ></textarea>
+                  </div>
+                  <button
+                    type="submit"
+                    className={contactPageStyles.button}
+                  >
+                    Enviar Mensaje
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         

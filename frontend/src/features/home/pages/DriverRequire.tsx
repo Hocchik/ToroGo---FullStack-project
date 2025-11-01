@@ -20,12 +20,12 @@ export const driverRequireStyles = {
   valueCardTitle: "font-semibold text-xl mb-2",
   valueCardText: "font-bold text-gray-600",
 
-  registerSection: "",
-  registerTitle: "text-center text-5xl font-semibold mb-4",
+  registerSection: "py-16 px-8",
+  registerTitle: "text-center text-5xl font-semibold mb-12",
   registerGrid: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto",
-  registerCard: "border border-none rounded-xl bg-white text-center max-w-xs mx-auto p-8",
-  registerCardTitle: "font-semibold text-xl mb-4 text-red-400",
-  registerCardText: "font-bold text-gray-600 ",
+  registerCard: "border border-none rounded-xl bg-white text-center max-w-xs mx-auto p-8 flex flex-col items-center",
+  registerCardTitle: "w-12 h-12 rounded-full bg-black text-red-400 flex items-center justify-center mb-4 text-xl font-bold",
+  registerCardText: "font-bold text-gray-600 text-center",
 
   preguntasSection: "bg-gray-50 py-16 px-8 mb-16",
   preguntasTitle: "text-4xl font-bold text-gray-900 text-center mb-12",
@@ -39,6 +39,12 @@ export const driverRequireStyles = {
   preguntasAnswer: "px-6 pb-6 text-gray-600 leading-relaxed",
   preguntasAnswerExpanded: "px-6 pb-6 text-gray-600 leading-relaxed border-t border-gray-100 pt-4",
 
+  // Sección CTA final
+  ctaSection: "bg-[#77160e] py-16 px-8",
+  ctaContainer: "max-w-4xl mx-auto text-center",
+  ctaTitle: "text-4xl font-bold text-white mb-6",
+  ctaDescription: "text-xl text-white/90 mb-8 leading-relaxed",
+  ctaButton: "inline-block bg-white text-[#77160e] px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-all duration-200 transform hover:scale-105 shadow-lg"
 }
 
 const faqData = [
@@ -89,7 +95,7 @@ export const DriverRequire = () => {
     const leftColumnFAQs = faqData.filter((_, index) => index % 2 === 0);
     const rightColumnFAQs = faqData.filter((_, index) => index % 2 === 1);
   return (
-    <div className={driverRequireStyles.driverRequireContainer}>
+    <div className={driverRequireStyles.driverRequireContainer} style={{ fontFamily: 'Montserrat, sans-serif' }}>
       
       {/* Nueva sección hero */}
       <section className={driverRequireStyles.heroSection}>
@@ -254,6 +260,25 @@ export const DriverRequire = () => {
                     ))}
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* Sección CTA Final */}
+            <div className={driverRequireStyles.ctaSection}>
+              <div className={driverRequireStyles.ctaContainer}>
+                <h2 className={driverRequireStyles.ctaTitle}>
+                  ¿Listo para empezar a ganar?
+                </h2>
+                <p className={driverRequireStyles.ctaDescription}>
+                  Únete a miles de conductores que ya están generando ingresos con ToroGo. 
+                  Regístrate hoy y comienza tu camino hacia la libertad financiera.
+                </p>
+                <a 
+                  href="/auth?register=true" 
+                  className={driverRequireStyles.ctaButton}
+                >
+                  Regístrate aquí
+                </a>
               </div>
             </div>
     </div>     

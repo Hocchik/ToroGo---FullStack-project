@@ -96,7 +96,7 @@ export const AboutPage = () => {
   const leftColumnFAQs = faqData.filter((_, index) => index % 2 === 0);
   const rightColumnFAQs = faqData.filter((_, index) => index % 2 === 1);
   return (
-    <div className={aboutPageStyles.container}>
+    <div className={aboutPageStyles.container} style={{ fontFamily: 'Montserrat, sans-serif' }}>
       <div className={aboutPageStyles.headerSection}>
 
       </div>
@@ -108,6 +108,39 @@ export const AboutPage = () => {
             Brindar un servicio de transporte seguro, eficiente y accesible mediante 
             nuestra red de mototaxis.
           </p>
+        </div>
+      </div>
+
+      <div className={aboutPageStyles.aboutusSection}>
+        <div className={aboutPageStyles.aboutusContainer}>
+          <div className={aboutPageStyles.aboutusImageContainer}>
+            <img src="/src/assets/nosotros.png" alt="Sobre Nosotros" className="w-full h-full object-cover rounded-lg" />
+          </div>
+
+          <div className={aboutPageStyles.aboutusContent}>
+            <h2 className={aboutPageStyles.aboutusTitle}>Sobre nosotros</h2>
+            <p className={aboutPageStyles.aboutusDescription}>
+              ToroGo es una empresa de tecnología que ofrece servicios de 
+              transporte. Conectamos a usuarios 
+              con mototaxistas verificados para brindar viajes seguros y confiables 
+              en todos los pueblos.
+            </p>
+            
+            <div className={aboutPageStyles.aboutusStatsList}>
+              <div className={aboutPageStyles.aboutusStatItem}>
+                <div className={aboutPageStyles.aboutusStatDot}></div>
+                <span className={aboutPageStyles.aboutusStatText}>Más de 1000 viajes realizados</span>
+              </div>
+              <div className={aboutPageStyles.aboutusStatItem}>
+                <div className={aboutPageStyles.aboutusStatDot}></div>
+                <span className={aboutPageStyles.aboutusStatText}>Más de 500 usuarios activos</span>
+              </div>
+              <div className={aboutPageStyles.aboutusStatItem}>
+                <div className={aboutPageStyles.aboutusStatDot}></div>
+                <span className={aboutPageStyles.aboutusStatText}>Más de 50 conductores verificados</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -155,43 +188,6 @@ export const AboutPage = () => {
             </div>
             <h3 className={aboutPageStyles.valueCardTitle}>Accesibilidad</h3>
             <p className={aboutPageStyles.valueCardText}>Ofrecemos tarifas justas y servicio accesible para toda la comunidad</p>
-          </div>
-        </div>
-      </div>
-
-      <div className={aboutPageStyles.aboutusSection}>
-        <div className={aboutPageStyles.aboutusContainer}>
-          <div className={aboutPageStyles.aboutusImageContainer}>
-            <img src="/src/assets/nosotros.png" alt="Sobre Nosotros" className="w-full h-full object-cover rounded-lg" />
-          </div>
-
-          <div className={aboutPageStyles.aboutusContent}>
-            <h2 className={aboutPageStyles.aboutusTitle}>Sobre nosotros</h2>
-            <p className={aboutPageStyles.aboutusDescription}>
-              ToroGo es una empresa de tecnología que ofrece servicios de 
-              transporte. Conectamos a usuarios 
-              con mototaxistas verificados para brindar viajes seguros y confiables 
-              en todos los pueblos.
-            </p>
-            
-            <div className={aboutPageStyles.aboutusStatsList}>
-              <div className={aboutPageStyles.aboutusStatItem}>
-                <div className={aboutPageStyles.aboutusStatDot}></div>
-                <span className={aboutPageStyles.aboutusStatText}>Más de 1000 viajes realizados</span>
-              </div>
-              <div className={aboutPageStyles.aboutusStatItem}>
-                <div className={aboutPageStyles.aboutusStatDot}></div>
-                <span className={aboutPageStyles.aboutusStatText}>Más de 500 usuarios activos</span>
-              </div>
-              <div className={aboutPageStyles.aboutusStatItem}>
-                <div className={aboutPageStyles.aboutusStatDot}></div>
-                <span className={aboutPageStyles.aboutusStatText}>Más de 50 conductores verificados</span>
-              </div>
-            </div>
-            
-            <button className={aboutPageStyles.aboutusButton}>
-              Más información
-            </button>
           </div>
         </div>
       </div>

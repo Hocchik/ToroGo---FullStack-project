@@ -29,6 +29,25 @@ export const AuthPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-white">
+      {/* Botón Volver - Esquina Superior Derecha */}
+      <div className="absolute top-4 right-4 z-10">
+        <button
+          onClick={() => navigate('/')}
+          className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 hover:shadow-md transition-all duration-200"
+          style={{ fontFamily: 'Montserrat, sans-serif' }}
+        >
+          <svg 
+            className="w-4 h-4 text-gray-600" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span className="text-gray-700 font-medium">Volver</span>
+        </button>
+      </div>
+
       <div className="min-h-screen flex">
         {/* Logo Section - Left Side */}
         <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 bg-[#f7f7f7] items-end justify-center p-12">

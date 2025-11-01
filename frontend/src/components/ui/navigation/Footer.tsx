@@ -28,12 +28,12 @@ export const footerStyles = {
 
 export const Footer = () => {
   return (
-    <footer className={footerStyles.footer}>
+    <footer className={footerStyles.footer} style={{ fontFamily: 'Montserrat, sans-serif' }}>
       <div className={footerStyles.container}>
         <div className={footerStyles.content}>
           {/* Logo y descripción */}
           <div className={footerStyles.brandSection}>
-            <img src="/Logo.png" alt="ToroGo" className={footerStyles.logo} />
+            <img src="./src/assets/logo-torigonombre.png" alt="ToroGo" className={footerStyles.logo} />
             <p className={footerStyles.description}>
               Viaja seguro en mototaxi con ToriGO!
             </p>
@@ -54,7 +54,14 @@ export const Footer = () => {
           </div>
 
           <div className={footerStyles.libro}>
-              <img src="/src/assets/reclamacion.png" alt="Libro" className={footerStyles.libroimg} />      
+            <a 
+              href="/Terminos-y-condiciones.pdf" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:opacity-80 transition-opacity"
+            >
+              <img src="/src/assets/reclamacion.png" alt="Libro de Reclamaciones" className={footerStyles.libroimg} />      
+            </a>
           </div>
 
         </div>

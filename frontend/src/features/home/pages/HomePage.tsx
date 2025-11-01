@@ -4,7 +4,7 @@ import { useState } from 'react';
  const homePageStyles = {
   container: "",
   
-  heroSection: "relative h-screen bg-gradient-to-r from-yellow-400 to-orange-500 ",
+  heroSection: "relative h-screen bg-gradient-to-r from-black to-red-500 ",
   heroContainer: "max-w-7xl mx-auto px-4 h-full flex items-center justify-between",
   
   heroContent: "text-white space-y-6 max-w-xl",
@@ -59,13 +59,13 @@ export const HomePage = () => {
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
 
   return (
-    <div className={homePageStyles.container}>
+    <div className={homePageStyles.container} style={{ fontFamily: 'Montserrat, sans-serif' }}>
       {/* Hero Section with Service Request */}
       <section className={homePageStyles.heroSection}>
         <div className={homePageStyles.heroContainer}>
           {/* Left side - Hero Content */}
           <div className={homePageStyles.heroContent}>
-            <h1 className={homePageStyles.heroTitle}>ToroGo!</h1>
+            <h1 className={homePageStyles.heroTitle}>ToriGo!</h1>
             <p className={homePageStyles.heroSubtitle}>Viaja seguro en mototaxi por cualquier lugar</p>
             <div className={homePageStyles.heroButtonsContainer}>
               <Link 

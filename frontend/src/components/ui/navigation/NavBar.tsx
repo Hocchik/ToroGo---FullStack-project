@@ -4,7 +4,7 @@ import type { RootState } from '../../../store';
 import { UserMenu } from '../UserMenu'; 
 
 export const navbarStyles = {
-  navbar: "bg-red-400 top-0 z-50 shadow-lg",
+  navbar: "bg-[#77160e] fixed top-0 w-full z-50 shadow-lg",
 
   container: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
 
@@ -12,7 +12,7 @@ export const navbarStyles = {
 
   logo: "flex items-center space-x-2",
 
-  logoImg: "translate-x-20 w-14 h-14",
+  logoImg: "translate-x-20 w-18 h-18",
 
   nav: "hidden md:flex space-x-8",
 
@@ -28,11 +28,12 @@ export const NavBar = () => {
     const role = useSelector((state: RootState) => state.auth.role);
 
     return(
+      <div style={{ fontFamily: 'Montserrat, sans-serif' }}>
         <nav className={navbarStyles.navbar}>
           <div className={navbarStyles.content}>
             {/* Logo */}
             <div className={navbarStyles.logo}>
-              <img src="/Logo.png" alt="Logo" className={navbarStyles.logoImg} />      
+              <img src="./src/assets/logo-torigo.png" alt="Logo" className={navbarStyles.logoImg} />      
             </div>
 
             {/* Atajos personalizados */}
@@ -55,5 +56,6 @@ export const NavBar = () => {
             </div>
           </div>
         </nav>
+      </div>  
     );
 };
