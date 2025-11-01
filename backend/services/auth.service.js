@@ -247,7 +247,10 @@ const validateData = async (RegisterDto) => {
     }
   }
 
-  if(trimedPhone[3] != '9' && trimedPhone.substring(3, trimedPhone.length-1).length != 9) {
+  if(trimedPhone[4] != '9' || trimedPhone.substring(3, trimedPhone.length-1).length != 9) {
+    console.log("PRUEBAS DE PHONE");
+    console.log(trimedPhone[3]);
+    console.log(trimedPhone.substring(3, trimedPhone.length-1).length);
     return {
       valid: false,
       status: 400,
@@ -317,7 +320,7 @@ const validateData = async (RegisterDto) => {
   //------------------------------------------------------------------------------------
 
   if(role == "DRIVER") {
-    const {license, plate } = RegisterDto;
+    const {license, plate, insurance_policy, expiration_date } = RegisterDto;
 
     // Validaciones de la placa y la licencia
     // Validamos que el campo license y plate hayan sido completados
@@ -365,7 +368,42 @@ const validateData = async (RegisterDto) => {
     }
 
     // Validaciones del seguro de poliza y su fecha de expiracion
+    //SOAT-EZ-0670-2025
+    if(!insurance_policy) {
+      return {
+        valid: false,
+        status: 400,
+        data: { error: 'Debe ingresar su póliza de seguro' }
+      };
+    }
+
+    const insurancePolicyPattern = /^SOAT-[A-Z]{2}-\d{4}-\d{4}$/;
+    if(!insurancePolicyPattern.test(insurance_policy)) {
+      return {
+        valid: false,
+        status: 400,
+        data: { error: 'La póliza de seguro debe tener el formato correcto (ejemplo: SOAT-EZ-0670-2025)' }
+      };
+    }
+
+    if(!expiration_date) {
+      return {
+        valid: false,
+        status: 400,
+        data: { error: 'Debe ingresar la fecha de expiración de su póliza de seguro' }
+      };
+    }
     
+    const currentDate = new Date();
+    const expDate = new Date(expiration_date);
+    if(expDate <= currentDate) {
+      return {
+        valid: false,
+        status: 400,
+        data: { error: 'La fecha de expiración de la póliza de seguro debe ser una fecha futura' }
+      };
+    }
+
 
     // Si pasa las validaciones, @returns {valid = true} 
      return {
