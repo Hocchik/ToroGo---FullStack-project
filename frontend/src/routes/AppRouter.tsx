@@ -77,7 +77,7 @@ export const AppRouter = () => {
         <Route path='/service/passenger' element={<ServiceRoute><PassengerPage/></ServiceRoute>}/>
         
         {/* Rutas de servicio - Conductor */}
-        <Route path='/service/driver' element={<ServiceRoute><DriverPage/></ServiceRoute>}/>
+        <Route path='/service/driver' element={<DriverPage/>}/>
 
         {/* Rutas de Autenticación */}
         <Route path="/auth" element={<AuthPage />} />

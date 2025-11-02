@@ -5,6 +5,7 @@ import RideDetails from "../components/RideDetails";
 import LoadingOverlay from "../components/LoadingOverlay";
 import RideNotificationQueue from "../components/RideNotificationQueue";
 import SlidingSidebar from "../components/SlidingSideBar";
+import fondoMototaxi from "../../../assets/DriverPage.png"; 
 
 const dummyRequests: RideRequest[] = [
   {
@@ -149,20 +150,56 @@ export const DriverPage = () => {
 
         {/* Pantalla inicial */}
         {!isOnline && !activeRide && !loading && (
-          <div className="flex-1 relative flex items-center justify-center p-4">
-            <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md text-center space-y-4">
-              <h2 className="text-xl font-semibold text-gray-700">¿Listo para recibir viajes?</h2>
-              <p className="text-sm text-gray-500">
-                Pulsa el botón para comenzar a buscar solicitudes cercanas.
-              </p>
-              <button
-                onClick={handleGoOnline}
-                className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition duration-300 ease-in-out"
-              >
-                🚀 Buscar viajes
-              </button>
-            </div>
-          </div>
+          <div className="flex-1 relative flex items-center justify-center p-6 bg-gray-50 overflow-hidden">
+    
+    {/* IMAGEN DE FONDO (Con Opacidad) */}
+    <div 
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url("${fondoMototaxi}")` }}
+    >
+        {/* Capa de opacidad para la imagen de fondo si es necesario oscurecerla o blanquearla */}
+        <div className="absolute inset-0 bg-black opacity-30"></div> 
+    </div>
+
+    {/* Contenedor del Mensaje (Medio Transparente) */}
+    <div 
+        className="
+            relative z-10 /* Asegura que esté por encima de la imagen */
+            bg-white/50 /* Fondo blanco semitransparente */ 
+            backdrop-blur-sm /* Efecto de desenfoque detrás, muy aesthetic */
+            rounded-3xl 
+            shadow-xl shadow-gray-200/50 
+            p-8 w-full max-w-sm text-center space-y-5
+        "
+    >
+        {/* Icono de Mototaxi (mantengo por estética, si no lo quieres lo puedes quitar) */}
+    
+        
+        <h2 className="text-2xl font-bold text-gray-900 tracking-wide">
+            ¿Listo para empezar?
+        </h2>
+        
+        <p className="text-sm text-gray-700 max-w-xs mx-auto">
+            Pulsa el botón para conectarte y **recibir solicitudes** de mototaxi cercanas.
+        </p>
+        
+        {/* Botón de Acción */}
+        <button
+            onClick={handleGoOnline}
+            className="
+                w-full bg-red-600 text-white 
+                py-4 
+                rounded-full 
+                font-extrabold text-lg uppercase tracking-wider
+                shadow-lg shadow-red-500/50 
+                hover:bg-red-700 hover:shadow-xl transition-all duration-300
+            "
+        >
+            ¡Buscar Viajes!
+        </button>
+        
+    </div>
+</div>
         )}
       </div>
    </div>
