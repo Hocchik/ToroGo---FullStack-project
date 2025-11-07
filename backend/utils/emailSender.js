@@ -5,14 +5,19 @@ dotenv.config();
 
 export const sendResetTokenEmail = async (to, token) => {
   console.log(`EMAIL USER: ${process.env.EMAIL_USER}`);
+  console.log(`EMAIL_PASSWORD: ${process.env.EMAIL_PASSWORD}`);
+  console.log(`CLientID: ${process.env.OAUTH_CLIENTID}`)
+  console.log(`CLIENT_SECRET,: ${process.env.OAUTH_CLIENT_SECRET}`)
+  console.log(`REFRESH_TOKEN,: ${process.env.OAUTH_REFRESH_TOKEN}`)
 
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,       // tu correo
-      pass: process.env.EMAIL_PASSWORD    // contraseña o app password
-    }
-  });
+
+ const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.APP_PASSWORD,
+  },
+});
 
   const mailOptions = {
     from: 'ToriGo! <no-reply@torigo.com>',
