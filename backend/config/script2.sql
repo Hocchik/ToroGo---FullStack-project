@@ -115,6 +115,20 @@ CREATE TABLE public.passengers (
 );
 
 
+-- public.password_resets definition
+
+-- Drop table
+
+-- DROP TABLE public.password_resets;
+
+CREATE TABLE public.password_resets (
+	user_id uuid NOT NULL,
+	"token" text NOT NULL,
+	expires_at timestamptz NOT NULL,
+	CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES public.users(id)
+);
+
+
 -- public.registered_vehicles definition
 
 -- Drop table

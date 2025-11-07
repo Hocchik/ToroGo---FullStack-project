@@ -1,6 +1,11 @@
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const sendResetTokenEmail = async (to, token) => {
+  console.log(`EMAIL USER: ${process.env.EMAIL_USER}`);
+
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -10,7 +15,7 @@ export const sendResetTokenEmail = async (to, token) => {
   });
 
   const mailOptions = {
-    from: 'Mototaxi App <no-reply@mototaxi.com>',
+    from: 'ToriGo! <no-reply@torigo.com>',
     to,
     subject: 'Recuperación de contraseña',
     html: `
