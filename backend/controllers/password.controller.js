@@ -26,6 +26,11 @@ export const resetPassword = async (req, res) => {
     if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
 
     const valid = await verifyPasswordResetToken(user.id, token);
+
+    console.log(`token recibido: ${token}`)
+    console.log(`user id: ${user.id} `)
+    console.log(`validación token: ${valid}`)
+    
     if (!valid) return res.status(400).json({ error: 'Token inválido o expirado' });
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
